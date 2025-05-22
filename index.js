@@ -8,9 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.9rzwgbq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.9rzwgbq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -26,15 +24,26 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Get the collection from the 'greencircle' database
-    const gardenersCollection = client.db("greencircle").collection("gardeners");
-    
+    const gardenersCollection = client
+      .db("greencircle")
+      .collection("gardeners");
+    const gardenTipsCollection = client
+      .db("greencircle").collection("gardenTips");  
+    const userCollection = client.db("greencircle").collection("users");
+
     app.get("/gardeners", async (req, res) => {
       const activeGardeners = await gardenersCollection
-      .find({status: "Active"})
-      .limit(6)
-      .toArray();
+        .find({ status: "Active" })
+        .limit(6)
+        .toArray();
       res.send(activeGardeners);
-    })
+    });
+
+    app.post("/users", async (req, res) => {
+      const userProfile = req.body;
+      const result = await userCollection.insertOne(userProfile);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

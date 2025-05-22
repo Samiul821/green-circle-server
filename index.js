@@ -39,6 +39,17 @@ async function run() {
       res.send(activeGardeners);
     });
 
+    app.post('/gardenTips', async (req, res) => {
+      const gardenTip = req.body;
+      const result = await gardenTipsCollection.insertOne(gardenTip);
+      res.send(result);
+    })
+
+    app.get('/gardenTips', async (req, res) => {
+      const gardenTips = await gardenTipsCollection.find().toArray();
+      res.send(gardenTips);
+    })
+
     app.post("/users", async (req, res) => {
       const userProfile = req.body;
       const result = await userCollection.insertOne(userProfile);

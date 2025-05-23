@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -28,7 +28,8 @@ async function run() {
       .db("greencircle")
       .collection("gardeners");
     const gardenTipsCollection = client
-      .db("greencircle").collection("gardenTips");  
+      .db("greencircle")
+      .collection("gardenTips");
     const userCollection = client.db("greencircle").collection("users");
 
     app.get("/gardeners", async (req, res) => {
@@ -39,15 +40,29 @@ async function run() {
       res.send(activeGardeners);
     });
 
-    app.post('/gardenTips', async (req, res) => {
+    app.post("/gardenTips", async (req, res) => {
       const gardenTip = req.body;
       const result = await gardenTipsCollection.insertOne(gardenTip);
       res.send(result);
-    })
+    });
 
-    app.get('/gardenTips', async (req, res) => {
+    app.get("/gardenTips", async (req, res) => {
       const gardenTips = await gardenTipsCollection.find().toArray();
       res.send(gardenTips);
+    });
+
+    app.get("/gardenTips/:id", async (req, res) => {
+     const id = req.params.id;
+     const query = {_id: new ObjectId(id)};
+     const result = await gardenTipsCollection.findOne(query);
+     res.send(result);
+    });
+
+    app.get('gardenTips', async (req, res) => {
+      const email = req.query.email;
+      const query = email ? {userEmail: email} : {};
+      const result = await gardenTipsCollection.find(query).toArray();
+      res.send(result);
     })
 
     app.post("/users", async (req, res) => {
@@ -62,8 +77,6 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
   }
 }
 run().catch(console.dir);

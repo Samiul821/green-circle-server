@@ -24,6 +24,9 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Get the collection from the 'greencircle' database
+    const slidesCollection = client
+      .db("greencircle")
+      .collection("slides");
     const gardenersCollection = client
       .db("greencircle")
       .collection("gardeners");
@@ -31,6 +34,11 @@ async function run() {
       .db("greencircle")
       .collection("gardenTips");
     const userCollection = client.db("greencircle").collection("users");
+
+    app.get("/slides", async (req, res) => {
+      const slides = await slidesCollection.find().toArray();
+      res.send(slides);
+    })
 
     app.get("/gardeners", async (req, res) => {
       const activeGardeners = await gardenersCollection

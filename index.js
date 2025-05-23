@@ -52,18 +52,35 @@ async function run() {
     });
 
     app.get("/gardenTips/:id", async (req, res) => {
-     const id = req.params.id;
-     const query = {_id: new ObjectId(id)};
-     const result = await gardenTipsCollection.findOne(query);
-     res.send(result);
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await gardenTipsCollection.findOne(query);
+      res.send(result);
     });
 
-    app.get('gardenTips', async (req, res) => {
+    app.get("gardenTips", async (req, res) => {
       const email = req.query.email;
-      const query = email ? {userEmail: email} : {};
+      const query = email ? { userEmail: email } : {};
       const result = await gardenTipsCollection.find(query).toArray();
       res.send(result);
-    })
+    });
+
+    app.put("/gardenTips/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedGardenTip = req.body;
+      const updatedDoc = {
+        $set: updatedGardenTip,
+      };
+
+      const result = await gardenTipsCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
 
     app.post("/users", async (req, res) => {
       const userProfile = req.body;

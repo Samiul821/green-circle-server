@@ -21,8 +21,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
     // Get the collection from the 'greencircle' database
     const slidesCollection = client
       .db("greencircle")
@@ -94,6 +92,20 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await gardenTipsCollection.deleteOne(query);
+      res.send(result);
+    })
+
+    app.patch('/gardenTips/:id/like', async (req, res) => {
+      const id = req.params.id;
+      const {increment} = req.body;
+      if(typeof increment !== 'number') {
+        return res.status(400).send({ error: 'Increment must be a number' });
+      }
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $inc: { likes: increment }
+      };
+      const result = await gardenTipsCollection.updateOne(filter, updateDoc);
       res.send(result);
     })
 

@@ -56,6 +56,15 @@ async function run() {
     });
 
     app.get("/gardenTips", async (req, res) => {
+      const email = req.query.email;
+      
+      const query = email ? { userEmail: email } : {};
+
+      const result = await gardenTipsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get("/gardenTips", async (req, res) => {
       const gardenTips = await gardenTipsCollection.find().toArray();
       res.send(gardenTips);
     });
@@ -67,15 +76,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/gardenTips", async (req, res) => {
-      const email = req.query.email;
-      console.log("Email filter:", email); // Debug
-      const query = email ? { userEmail: email } : {}; // ✅ এখানেই userEmail ইউজ করো
-      console.log("Final query:", query);
-
-      const result = await gardenTipsCollection.find(query).toArray();
-      res.send(result);
-    });
+    
 
     app.put("/gardenTips/:id", async (req, res) => {
       const id = req.params.id;

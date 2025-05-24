@@ -69,7 +69,7 @@ async function run() {
 
     app.get("/gardenTips", async (req, res) => {
       const email = req.query.email;
-      const query = email ? { userEmail: email } : {};
+      const query = email ? { email: email } : {};
       const result = await gardenTipsCollection.find(query).toArray();
       res.send(result);
     });

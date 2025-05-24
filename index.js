@@ -44,7 +44,7 @@ async function run() {
       res.send(activeGardeners);
     });
 
-    app.get('gardeners', async (req, res) => {
+    app.get('/allGardeners', async (req, res) => {
       const gardeners = await gardenersCollection.find().toArray();
       res.send(gardeners);
     })

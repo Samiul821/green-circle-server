@@ -22,9 +22,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Get the collection from the 'greencircle' database
-    const slidesCollection = client
-      .db("greencircle")
-      .collection("slides");
+    const slidesCollection = client.db("greencircle").collection("slides");
     const gardenersCollection = client
       .db("greencircle")
       .collection("gardeners");
@@ -36,7 +34,7 @@ async function run() {
     app.get("/slides", async (req, res) => {
       const slides = await slidesCollection.find().toArray();
       res.send(slides);
-    })
+    });
 
     app.get("/gardeners", async (req, res) => {
       const activeGardeners = await gardenersCollection
@@ -88,26 +86,36 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/gardenTips/:id", async (req,res) => {
+    app.delete("/gardenTips/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await gardenTipsCollection.deleteOne(query);
       res.send(result);
-    })
+    });
 
-    app.patch('/gardenTips/:id/like', async (req, res) => {
+    app.patch("/gardenTips/:id/like", async (req, res) => {
       const id = req.params.id;
-      const {increment} = req.body;
-      if(typeof increment !== 'number') {
-        return res.status(400).send({ error: 'Increment must be a number' });
+      const { increment } = req.body;
+      if (typeof increment !== "number") {
+        return res.status(400).send({ error: "Increment must be a number" });
       }
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
-        $inc: { likes: increment }
+        $inc: { likes: increment },
       };
       const result = await gardenTipsCollection.updateOne(filter, updateDoc);
       res.send(result);
-    })
+    });
+
+    app.get("/top-liked-tips", async (req, res) => {
+      const topTips = await gardenTipsCollection
+        .find()
+        .sort({ likes: -1 })
+        .limit(6)
+        .toArray();
+
+      res.send(topTips);
+    });
 
     app.post("/users", async (req, res) => {
       const userProfile = req.body;

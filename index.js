@@ -67,11 +67,26 @@ async function run() {
       res.send(result);
     });
 
+    // GET /gardenTips?email=user@example.com
     app.get("/gardenTips", async (req, res) => {
       const email = req.query.email;
-      const query = email ? { email: email } : {};
-      const result = await gardenTipsCollection.find(query).toArray();
-      res.send(result);
+
+      // যদি email না থাকে তাহলে error রিটার্ন করবে
+      if (!email) {
+        return res
+          .status(400)
+          .json({ error: "Email query parameter is required" });
+      }
+
+      try {
+        // শুধু ঐ email এর ডাটা ফিল্টার করবে
+        const query = { email: email };
+        const result = await gardenTipsCollection.find(query).toArray();
+        res.json(result);
+      } catch (error) {
+        console.error("Error fetching garden tips:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     });
 
     app.put("/gardenTips/:id", async (req, res) => {

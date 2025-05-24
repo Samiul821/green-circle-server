@@ -107,7 +107,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/gardenTips/top-liked", async (req, res) => {
+    app.get("/top-liked", async (req, res) => {
       const topTips = await gardenTipsCollection
         .find()
         .sort({ likes: -1 })

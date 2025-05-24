@@ -44,10 +44,10 @@ async function run() {
       res.send(activeGardeners);
     });
 
-    app.get('/allGardeners', async (req, res) => {
+    app.get("/allGardeners", async (req, res) => {
       const gardeners = await gardenersCollection.find().toArray();
       res.send(gardeners);
-    })
+    });
 
     app.post("/gardenTips", async (req, res) => {
       const gardenTip = req.body;
@@ -67,7 +67,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("gardenTips", async (req, res) => {
+    app.get("/gardenTips", async (req, res) => {
       const email = req.query.email;
       const query = email ? { userEmail: email } : {};
       const result = await gardenTipsCollection.find(query).toArray();

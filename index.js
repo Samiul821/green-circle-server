@@ -71,6 +71,8 @@ async function run() {
       const email = req.query.email;
       console.log("Email filter:", email); // Debug
       const query = email ? { userEmail: email } : {}; // ✅ এখানেই userEmail ইউজ করো
+      console.log("Final query:", query);
+
       const result = await gardenTipsCollection.find(query).toArray();
       res.send(result);
     });

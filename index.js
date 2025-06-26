@@ -57,7 +57,7 @@ async function run() {
 
     app.get("/gardenTips", async (req, res) => {
       const email = req.query.email;
-      
+
       const query = email ? { userEmail: email } : {};
 
       const result = await gardenTipsCollection.find(query).toArray();
@@ -75,8 +75,6 @@ async function run() {
       const result = await gardenTipsCollection.findOne(query);
       res.send(result);
     });
-
-    
 
     app.put("/gardenTips/:id", async (req, res) => {
       const id = req.params.id;
@@ -124,6 +122,28 @@ async function run() {
         .toArray();
 
       res.send(topTips);
+    });
+
+    app.get("/dashboard-stats", async (req, res) => {
+      try {
+        const userEmail = req.query.email;
+
+        const totalTips = await gardenTipsCollection.estimatedDocumentCount();
+        const myTips = await gardenTipsCollection.countDocuments({ userEmail });
+        const totalGardeners =
+          await gardenersCollection.estimatedDocumentCount();
+        const totalUsers = await userCollection.estimatedDocumentCount();
+
+        res.send({
+          totalTips,
+          myTips,
+          totalGardeners,
+          totalUsers,
+        });
+      } catch (error) {
+        console.error("Stats error:", error);
+        res.status(500).send({ error: "Failed to fetch stats" });
+      }
     });
 
     app.post("/users", async (req, res) => {

@@ -6,8 +6,8 @@
 
 ## Project Overview
 
-Green Circle একটি আধুনিক এবং ফাস্ট পারফরম্যান্স ওয়েব সার্ভার যা Node.js এবং Express দিয়ে তৈরি।  
-এই সার্ভার MongoDB ডাটাবেস ব্যবহার করে এবং CORS ও dotenv দিয়ে পরিবেশ সেটিংস ও নিরাপত্তা নিয়ন্ত্রণ করে।
+Green Circle is a modern and high-performance web server built with Node.js and Express.  
+The server uses MongoDB as its database and manages environment variables and security using dotenv and enables CORS for cross-origin resource sharing.
 
 ---
 
@@ -26,8 +26,10 @@ Green Circle একটি আধুনিক এবং ফাস্ট পার
 <div>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express" width="40" height="40" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="40" height="40" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cors/cors-original.svg" alt="CORS" width="40" height="40" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotenv/dotenv-original.svg" alt="Dotenv" width="40" height="40" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="40" height="40" />
+  <!-- Since there are no official icons for cors and dotenv, we use text labels -->
+  <span style="font-weight:bold; font-size: 18px; margin-left: 15px;">CORS</span>
+  <span style="font-weight:bold; font-size: 18px; margin-left: 15px;">dotenv</span>
 </div>
 
 ---
